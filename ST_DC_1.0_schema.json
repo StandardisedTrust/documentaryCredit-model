@@ -1,0 +1,1998 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"description": "Standardised Trust Documentary Credit (DC) JSON Schema, 2024-06, aligned with ST_DC_SemanticModel_1.0_2024_June.xlsx",
+	"type": "object",
+	"properties": {
+		"lifeCycleAction": {
+			"description": "In which lifecycle the documentary credit is, set with enumeration values",
+			"oneOf": [
+				{
+					"$ref": "#/definitions/lifeCycleActions"
+				},
+				{
+					"type": "array",
+					"minItems": 1,
+					"maxItems": 1,
+					"uniqueItems": true,
+					"items": {
+						"$ref": "#/definitions/lifeCycleActions"
+					}
+				}
+			]
+		},
+		"coverLetter": {
+			"type": "object",
+			"properties": {
+				"lifeCycleSequence": {
+					"type": "string"
+				},
+				"date": {
+					"description": "Cover letter date/time",
+					"$ref": "#/definitions/dateChoice"
+				},
+				"text": {
+					"description": "Cover letter instructions from one party to another in a life-cycle event or its sequence",
+					"type": "object",
+					"$ref": "#/definitions/instruction"
+				}
+			},
+			"required": [
+				"lifeCycleSequence",
+				"date",
+				"text"
+			]
+		},
+		"references": {
+			"description": "A combo of actual documentary credit reference value and the party setting the reference. May exist many times, one per party to refer uniquely.",
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/reference"
+			}
+		},
+		"settings": {
+			"description": "documentary credit basic settings",
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/settingsDC"
+			}
+		},
+		"parties": {
+			"description": "documentary credit party from ready-made party type list with all details included",
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/party"
+			}
+		},
+		"documentaryCreditAmount": {
+			"description": "documentary credit amount with currency",
+			"$ref": "#/definitions/amountWithCurrency"
+		},
+		"creditAmountTolerance": {
+			"description": "Defined amount tolerance within which the documentary credit can vary.",
+			"$ref": "#/definitions/amountTolerance"
+		},
+		"additionalAmountsCovered": {
+			"description": "Additional, type coded amounts within the documentary credit",
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/amountCovered"
+			}
+		},
+		"contractAmount": {
+			"description": "contract amount with currency, if differing from documentary credit amount",
+			"$ref": "#/definitions/amountWithCurrency"
+		},
+		"availableWithBy": {
+			"description": "By which action the credit is available",
+			"$ref": "#/definitions/available"
+		},
+		"issuanceDetails": {
+			"description": "Details for documentary credit issuance",
+			"type": "object",
+			"properties": {
+				"type": {
+					"description": "documentary credit issuance type code from ready-made enumeration list, used only in issuance life-cycle",
+					"oneOf": [
+						{
+							"$ref": "#/definitions/issuanceTypes"
+						},
+						{
+							"type": "array",
+							"minItems": 1,
+							"maxItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"$ref": "#/definitions/issuanceTypes"
+							}
+						}
+					]
+				},
+				"date": {
+					"description": "Date of documentary credit issuance",
+					"$ref": "#/definitions/dateChoice"
+				},
+				"place": {
+					"description": "Place of documentary credit issuance",
+					"type": "object",
+					"$ref": "#/definitions/location"
+				}
+			},
+			"required": [
+				"type",
+				"date",
+				"place"
+			],
+			"additionalProperties": false
+		},
+		"expiryDetails": {
+			"description": "Expiry details; now only date and free text.  Availability to add more when needed",
+			"type": "object",
+			"properties": {
+				"date": {
+					"description": "Either fixed date of expiry.",
+					"$ref": "#/definitions/dateChoice"
+				},
+				"additionalInformation": {
+					"description": "free text information, or use of URL for ready-made text reference",
+					"type": "object",
+					"$ref": "#/definitions/uriTextChoice"
+				}
+			},
+			"required": [
+				"date"
+			],
+			"additionalProperties": false
+		},
+		"governanceRules": {
+			"description": "Definition of documentary credit rule set",
+			"type": "object",
+			"properties": {
+				"ruleIdentifier": {
+					"oneOf": [
+						{
+							"$ref": "#/definitions/ruleIdentifiers"
+						},
+						{
+							"type": "array",
+							"minItems": 1,
+							"maxItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"$ref": "#/definitions/ruleIdentifiers"
+							}
+						}
+					]
+				}
+			},
+			"required": [
+				"ruleIdentifier"
+			]
+		},
+		"charges": {
+			"description": "Charges definitions by each and every party needed",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"type": {
+						"description": "type of a charge",
+						"oneOf": [
+							{
+								"$ref": "#/definitions/chargeTypes"
+							},
+							{
+								"type": "array",
+								"minItems": 1,
+								"maxItems": 1,
+								"uniqueItems": true,
+								"items": {
+									"$ref": "#/definitions/chargeTypes"
+								}
+							}
+						]
+					},
+					"amount": {
+						"description": "documentary credit charges amount with currency",
+						"$ref": "#/definitions/amountWithCurrency"
+					},
+					"payableByParty": {
+						"description": "documentary credit party from ready-made enumeration list",
+						"oneOf": [
+							{
+								"$ref": "#/definitions/partyTypes"
+							},
+							{
+								"type": "array",
+								"minItems": 1,
+								"maxItems": 1,
+								"uniqueItems": true,
+								"items": {
+									"$ref": "#/definitions/partyTypes"
+								}
+							}
+						]
+					},
+					"chargesInformation": {
+						"description": "free text of possible additional charges information, or use of URL for ready-made text reference",
+						"type": "object",
+						"$ref": "#/definitions/uriTextChoice"
+					}
+				},
+				"required": [
+					"type",
+					"amount",
+					"payableByParty"
+				],
+				"additionalProperties": false
+			}
+		},
+		"documentaryCreditAccounts": {
+			"description": "Bank accounts related to the documentary credit",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"documentaryCreditAccountType": {
+						"description": "type of a documentary credit bank account",
+						"oneOf": [
+							{
+								"$ref": "#/definitions/documentaryCreditAccountTypes"
+							},
+							{
+								"type": "array",
+								"minItems": 1,
+								"maxItems": 1,
+								"uniqueItems": true,
+								"items": {
+									"$ref": "#/definitions/documentaryCreditAccountTypes"
+								}
+							}
+						]
+					},
+					"accountType": {
+						"description": "bank account type",
+						"oneOf": [
+							{
+								"$ref": "#/definitions/accountTypes"
+							},
+							{
+								"type": "array",
+								"minItems": 1,
+								"maxItems": 1,
+								"uniqueItems": true,
+								"items": {
+									"$ref": "#/definitions/accountTypes"
+								}
+							}
+						]
+					},
+					"identification": {
+						"description": "Bank Account / Alias identifier",
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 35
+					},
+					"currency": {
+						"$ref": "#/definitions/currency"
+					}
+				},
+				"required": [
+					"documentaryCreditAccountType",
+					"accountType",
+					"identification"
+				],
+				"additionalProperties": false
+			}
+		},
+		"milestones": {
+			"description": "documentary credit milestone for partial deliveries.  only one milestone needed in a simple DC case",
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/milestone"
+			}
+		},
+		"signatureDetails": {
+			"description": "General data on data set initiation and execution party, timestamp and signature.  Siganturtes may be many.",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"signingParty": {
+						"description": "signing party from ready-made enumeration list",
+						"oneOf": [
+							{
+								"$ref": "#/definitions/partyTypes"
+							},
+							{
+								"type": "array",
+								"minItems": 1,
+								"maxItems": 1,
+								"uniqueItems": true,
+								"items": {
+									"$ref": "#/definitions/partyTypes"
+								}
+							}
+						]
+					},
+					"signature": {
+						"description": "any formatted signature, now a simple Base64 assumption",
+						"type": "string",
+						"contentEncoding": "base64"
+					},
+					"initiatingParty": {
+						"description": "initiating party from ready-made enumeration list",
+						"oneOf": [
+							{
+								"$ref": "#/definitions/partyTypes"
+							},
+							{
+								"type": "array",
+								"minItems": 1,
+								"maxItems": 1,
+								"uniqueItems": true,
+								"items": {
+									"$ref": "#/definitions/partyTypes"
+								}
+							}
+						]
+					},
+					"executingParty": {
+						"description": "executing party from ready-made enumeration list",
+						"oneOf": [
+							{
+								"$ref": "#/definitions/partyTypes"
+							},
+							{
+								"type": "array",
+								"minItems": 1,
+								"maxItems": 1,
+								"uniqueItems": true,
+								"items": {
+									"$ref": "#/definitions/partyTypes"
+								}
+							}
+						]
+					},
+					"status": {
+						"description": "status code from ready-made enumeration list",
+						"oneOf": [
+							{
+								"$ref": "#/definitions/statusCodes"
+							},
+							{
+								"type": "array",
+								"minItems": 1,
+								"maxItems": 1,
+								"uniqueItems": true,
+								"items": {
+									"$ref": "#/definitions/statusCodes"
+								}
+							}
+						]
+					},
+					"dateOfChange": {
+						"description": "Date of signature or change of the record",
+						"$ref": "#/definitions/dateChoice"
+					},
+					"identifierPrevious": {
+						"description": "UUID reference to the previously valid data set before change",
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 36
+					}
+				},
+				"required": [
+					"dateOfChange",
+					"signature",
+					"signingParty",
+					"status"
+				],
+				"additionalProperties": false
+			}
+		}
+	},
+	"required": [
+		"lifeCycleAction",
+		"references",
+		"settings",
+		"parties",
+		"documentaryCreditAmount",
+		"availableWithBy",
+		"governanceRules",
+		"milestones"
+	],
+	"additionalProperties": false,
+	"definitions": {
+		"lifeCycleActions": {
+			"type": "string",
+			"enum": [
+				"application",
+				"issuance",
+				"advice",
+				"amendment",
+				"draft notification",
+				"amendment request",
+				"amendment notification",
+				"amendment acceptance",
+				"discrepancy advice",
+				"discrepancy response",
+				"payment advice",
+				"accept advice",
+				"negotiation advice",
+				"discharge advice",
+				"refusal advice",
+				"import payment settlement",
+				"credit advice",
+				"confirmation advice",
+				"third bank advice",
+				"presentation response",
+				"discrepant presentation",
+				"transfer request",
+				"transfer advice",
+				"transfer notification",
+				"export payment settlement",
+				"pre-advice",
+				"acknowledgement",
+				"reimbursement authorisation",
+				"reimbursement claim",
+				"reimbursement non-confirming",
+				"reimbursement amendment"
+			]
+		},
+		"reference": {
+			"type": "object",
+			"properties": {
+				"identifier": {
+					"description": "UUID as preferred input (https://en.wikipedia.org/wiki/Universally_unique_identifier)",
+					"type": "string",
+					"minLength": 1,
+					"maxLength": 36
+				},
+				"partyType": {
+					"description": "documentary credit party from ready-made enumeration list",
+					"oneOf": [
+						{
+							"$ref": "#/definitions/partyTypes"
+						},
+						{
+							"type": "array",
+							"minItems": 1,
+							"maxItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"$ref": "#/definitions/partyTypes"
+							}
+						}
+					]
+				},
+				"additionalInformation": {
+					"description": "free text information, or use of URL for ready-made text reference",
+					"type": "object",
+					"$ref": "#/definitions/uriTextChoice"
+				}
+			},
+			"required": [
+				"identifier",
+				"partyType"
+			],
+			"additionalProperties": false
+		},
+		"partyTypes": {
+			"type": "string",
+			"enum": [
+				"advising",
+				"any bank",
+				"applicant",
+				"beneficiary",
+				"confirmation",
+				"issuer",
+				"obligor",
+				"ordering",
+				"presenting",
+				"second advising",
+				"local issuer"
+			]
+		},
+		"issuanceTypes": {
+			"type": "string",
+			"enum": [
+				"irrevocable",
+				"irrevocable & transferable"
+			]
+		},
+		"expiryTypes": {
+			"type": "string",
+			"enum": [
+				"unlimited",
+				"fixed"
+			]
+		},
+		"addressTypes": {
+			"type": "string",
+			"enum": [
+				"postal",
+				"poBox",
+				"residential",
+				"business",
+				"mail to",
+				"delivery to"
+			]
+		},
+		"organisationIdentifierTypes": {
+			"type": "string",
+			"enum": [
+				"BIC = business identifier code",
+				"LEI = legal entity identifier",
+				"bank party",
+				"central bank identifier",
+				"clearing identifier",
+				"certificate of incorporation number",
+				"country identifier code",
+				"customer number",
+				"DUNS",
+				"employer identifier",
+				"global location number",
+				"SIREN",
+				"SIRET",
+				"tax identfier",
+				"local identifier"
+			]
+		},
+		"privateIdentifierTypes": {
+			"type": "string",
+			"enum": [
+				"date and place of birth",
+				"alien registration number",
+				"passport number",
+				"customer identifier number",
+				"drivers license number",
+				"employee identifier number",
+				"national identifier number",
+				"social security number",
+				"tax identifier"
+			]
+		},
+		"nameTypes": {
+			"type": "string",
+			"enum": [
+				"doctor",
+				"madam",
+				"miss",
+				"mister",
+				"gender neutral",
+				"group",
+				"platform"
+			]
+		},
+		"collateralTypes": {
+			"type": "string",
+			"enum": [
+				"facility",
+				"documentary credit",
+				"other"
+			]
+		},
+		"ruleIdentifiers": {
+			"type": "string",
+			"enum": [
+				"UCP",
+				"UCPURR",
+				"EUCP",
+				"EUCPURR",
+				"OTHR"
+			]
+		},
+		"transactionTypes": {
+			"type": "string",
+			"enum": [
+				"contract",
+				"delivery order",
+				"proforma invoice",
+				"purchase order",
+				"quotation",
+				"tender"
+			]
+		},
+		"mediumTypes": {
+			"type": "string",
+			"enum": [
+				"both paper and electronic",
+				"paper",
+				"electronic"
+			]
+		},
+		"documentTypes": {
+			"type": "string",
+			"enum": [
+				"beneficiary statement",
+				"commercial invoice",
+				"claim form",
+				"demand",
+				"transfer form",
+				"warehouse receipt",
+				"certificate of origin",
+				"packing list",
+				"bill of lading",
+				"customs/goods declaration",
+				"insurance certification",
+				"air cargo manifest",
+				"airway bill",
+				"bill of exchange",
+				"promissory note",
+				"cargo insurance document",
+				"customs bond",
+				"export cargo shipping instruction",
+				"letter of credit",
+				"payment confirmation",
+				"purchase order",
+				"rail consignment (CIM) note",
+				"road consignment (CMR) note",
+				"sea cargo manifest",
+				"sea waybill",
+				"ship’s delivery order"
+			]
+		},
+		"termsTypes": {
+			"type": "string",
+			"enum": [
+				"additional terms and conditions",
+				"applied terms and conditions",
+				"charge details",
+				"drawing details",
+				"proceeds assignable",
+				"terms of effectiveness",
+				"transfer",
+				"terms of variation",
+				"standard terms & conditions"
+			]
+		},
+		"chargeTypes": {
+			"type": "string",
+			"enum": [
+				"agent's commission",
+				"our commission",
+				"our correspondent's commission",
+				"commercial discount",
+				"stamp duty",
+				"telecommunication",
+				"transfer",
+				"wharfing and warehouse",
+				"confirmation",
+				"acceptance",
+				"advice",
+				"amendment",
+				"commitment",
+				"courier",
+				"deferred payment",
+				"discrepancies",
+				"forfaiting",
+				"handling",
+				"interest",
+				"insurance premium",
+				"negotiation",
+				"notification",
+				"observation",
+				"payment",
+				"postage",
+				"preadvice",
+				"reimbursement",
+				"Swift",
+				"other"
+			]
+		},
+		"methodTypes": {
+			"type": "string",
+			"enum": [
+				"courier",
+				"email",
+				"fax",
+				"messenger",
+				"post",
+				"registered mail",
+				"secure email",
+				"SWIFTNet FileAct",
+				"SWIFTNet InterAct",
+				"SWIFT MT",
+				"SWIFT MX",
+				"telecommunication",
+				"web upload/download"
+			]
+		},
+		"documentaryCreditAccountTypes": {
+			"type": "string",
+			"enum": [
+				"liability",
+				"charges",
+				"settlements"
+			]
+		},
+		"accountTypes": {
+			"type": "string",
+			"enum": [
+				"IBAN=International Bank Account Number",
+				"BBAN=Basic Bank Account Number",
+				"proxy/alias for the bank account number"
+			]
+		},
+		"formatTypes": {
+			"type": "string",
+			"enum": [
+				"Adobe pdf",
+				"XML=eXtended Markup Language",
+				"spreadsheet (like MS Excel)",
+				"MS Word",
+				"XSLT=eXtensible Stylesheet Language Transformations",
+				"text file",
+				"ZIP file"
+			]
+		},
+		"terminationTypes": {
+			"type": "string",
+			"enum": [
+				"underlying business finished",
+				"tender non accpetance",
+				"reduction terms fulfilled",
+				"warranty obligation period expired"
+			]
+		},
+		"demandTypes": {
+			"type": "string",
+			"enum": [
+				"pay or extend",
+				"pay only"
+			]
+		},
+		"party": {
+			"description": "documentary credit party from ready-made enumeration list",
+			"type": "object",
+			"properties": {
+				"partyType": {
+					"oneOf": [
+						{
+							"$ref": "#/definitions/partyTypes"
+						},
+						{
+							"type": "array",
+							"minItems": 1,
+							"maxItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"$ref": "#/definitions/partyTypes"
+							}
+						}
+					]
+				},
+				"name": {
+					"description": "documentary credit party name",
+					"type": "string"
+				},
+				"address": {
+					"description": "documentary credit party address",
+					"type": "object",
+					"$ref": "#/definitions/address"
+				},
+				"identifier": {
+					"description": "A party identifier which can be organisational or private id",
+					"type": "object",
+					"properties": {
+						"organisationIdentifier": {
+							"type": "string",
+							"minLength": 1
+						},
+						"organisationIdentifierType": {
+							"oneOf": [
+								{
+									"$ref": "#/definitions/organisationIdentifierTypes"
+								},
+								{
+									"type": "array",
+									"minItems": 1,
+									"maxItems": 1,
+									"uniqueItems": true,
+									"items": {
+										"$ref": "#/definitions/organisationIdentifierTypes"
+									}
+								}
+							]
+						},
+						"privateIdentifier": {
+							"type": "string",
+							"minLength": 1
+						},
+						"privateIdentifierType": {
+							"oneOf": [
+								{
+									"$ref": "#/definitions/privateIdentifierTypes"
+								},
+								{
+									"type": "array",
+									"minItems": 1,
+									"maxItems": 1,
+									"uniqueItems": true,
+									"items": {
+										"$ref": "#/definitions/privateIdentifierTypes"
+									}
+								}
+							]
+						}
+					},
+					"oneOf": [
+						{
+							"required": [
+								"organisationIdentifier",
+								"organisationIdentifierType"
+							]
+						},
+						{
+							"required": [
+								"privateIdentifier",
+								"privateIdentifierType"
+							]
+						}
+					]
+				},
+				"contactDetails": {
+					"description": "documentary credit party contact details",
+					"type": "object",
+					"$ref": "#/definitions/contactDetail"
+				}
+			},
+			"required": [
+				"partyType",
+				"name",
+				"address"
+			],
+			"additionalProperties": false
+		},
+		"address": {
+			"type": "object",
+			"properties": {
+				"addressType": {
+					"oneOf": [
+						{
+							"$ref": "#/definitions/addressTypes"
+						},
+						{
+							"type": "array",
+							"minItems": 1,
+							"maxItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"$ref": "#/definitions/addressTypes"
+							}
+						}
+					]
+				},
+				"department": {
+					"type": "string"
+				},
+				"subDepartment": {
+					"type": "string"
+				},
+				"streetName": {
+					"type": "string"
+				},
+				"postBox": {
+					"type": "string"
+				},
+				"buildingNumber": {
+					"type": "string"
+				},
+				"buildingName": {
+					"type": "string"
+				},
+				"floor": {
+					"type": "string"
+				},
+				"postBox": {
+					"type": "string"
+				},
+				"room": {
+					"type": "string"
+				},
+				"postCode": {
+					"type": "string"
+				},
+				"townName": {
+					"type": "string"
+				},
+				"townLocationName": {
+					"type": "string"
+				},
+				"districtName": {
+					"type": "string"
+				},
+				"countrySubDivision": {
+					"type": "string"
+				},
+				"country": {
+					"type": "string"
+				},
+				"countryOfResidence": {
+					"type": "string"
+				}
+			},
+			"required": [
+				"addressType"
+			]
+		},
+		"collateral": {
+			"description": "Details for collateral / facility for documentary credit",
+			"type": "object",
+			"properties": {
+				"collateralType": {
+					"description": "collateral / facility party from ready-made enumeration list",
+					"oneOf": [
+						{
+							"$ref": "#/definitions/collateralTypes"
+						},
+						{
+							"type": "array",
+							"minItems": 1,
+							"maxItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"$ref": "#/definitions/collateralTypes"
+							}
+						}
+					]
+				},
+				"identification": {
+					"type": "string"
+				},
+				"issuer": {
+					"type": "string"
+				},
+				"additionalInformation": {
+					"description": "free text information, or use of URL for ready-made text reference",
+					"type": "object",
+					"$ref": "#/definitions/uriTextChoice"
+				}
+			},
+			"required": [
+				"collateralType",
+				"identification"
+			],
+			"additionalProperties": false
+		},
+		"contactDetail": {
+			"type": "object",
+			"properties": {
+				"nameType": {
+					"oneOf": [
+						{
+							"$ref": "#/definitions/nameTypes"
+						},
+						{
+							"type": "array",
+							"minItems": 1,
+							"maxItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"$ref": "#/definitions/nameTypes"
+							}
+						}
+					]
+				},
+				"name": {
+					"type": "string"
+				},
+				"phoneNumber": {
+					"type": "string"
+				},
+				"mobileNumber": {
+					"type": "string"
+				},
+				"faxNumber": {
+					"type": "string"
+				},
+				"emailAddress": {
+					"type": "string",
+					"format": "email"
+				},
+				"emailPurpose": {
+					"type": "string"
+				},
+				"jobTitle": {
+					"type": "string"
+				},
+				"responsibility": {
+					"type": "string"
+				},
+				"department": {
+					"type": "string"
+				},
+				"channelType": {
+					"type": "string"
+				},
+				"channelId": {
+					"type": "string"
+				},
+				"preferredMethod": {
+					"type": "string"
+				}
+			}
+		},
+		"location": {
+			"type": "object",
+			"properties": {
+				"townName": {
+					"type": "string"
+				},
+				"countrySubDivision": {
+					"type": "string"
+				},
+				"country": {
+					"type": "string"
+				},
+				"text": {
+					"description": "free text Cover Letter of the documentary credit, or use of URL for ready-made text reference",
+					"$ref": "#/definitions/uriTextChoice"
+				}
+			}
+		},
+		"uriTextChoice": {
+			"type": "object",
+			"properties": {
+				"uri": {
+					"description": "URL for ready-made text reference",
+					"type": "string",
+					"format": "uri-reference"
+				},
+				"text": {
+					"description": "free text purpose of the documentary credit",
+					"type": "string"
+				}
+			},
+			"oneOf": [
+				{
+					"required": [
+						"uri"
+					]
+				},
+				{
+					"required": [
+						"text"
+					]
+				}
+			]
+		},
+		"currency": {
+			"description": "ISO 4217 currency code, e.g.: USD, EUR, CHF",
+			"type": "string",
+			"pattern": "^[a-zA-Z]{3}$"
+		},
+		"deliveryChannel": {
+			"description": "Details of the communication channel",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"methodType": {
+						"description": "type of a communication method",
+						"oneOf": [
+							{
+								"$ref": "#/definitions/methodTypes"
+							},
+							{
+								"type": "array",
+								"minItems": 1,
+								"maxItems": 1,
+								"uniqueItems": true,
+								"items": {
+									"$ref": "#/definitions/methodTypes"
+								}
+							}
+						]
+					},
+					"deliverTo": {
+						"description": "documentary credit party from ready-made enumeration list",
+						"oneOf": [
+							{
+								"$ref": "#/definitions/partyTypes"
+							},
+							{
+								"type": "array",
+								"minItems": 1,
+								"maxItems": 1,
+								"uniqueItems": true,
+								"items": {
+									"$ref": "#/definitions/partyTypes"
+								}
+							}
+						]
+					},
+					"contactDetails": {
+						"description": "Deliver to contact details",
+						"$ref": "#/definitions/contactDetail"
+					},
+					"deliveryAddress": {
+						"description": "Deliver to address",
+						"$ref": "#/definitions/address"
+					}
+				},
+				"required": [
+					"methodType",
+					"deliverTo"
+				],
+				"additionalProperties": false
+			}
+		},
+		"amountWithCurrency": {
+			"description": "amount with currency",
+			"type": "object",
+			"properties": {
+				"amount": {
+					"description": "The amount in the specified currency",
+					"type": "number"
+				},
+				"currency": {
+					"$ref": "#/definitions/currency"
+				}
+			},
+			"required": [
+				"amount",
+				"currency"
+			]
+		},
+		"amountTolerance": {
+			"description": "Amount Tolerance boundaries",
+			"type": "object",
+			"properties": {
+				"plusPercentage": {
+					"type": "number",
+					"minimum": 0,
+					"maximum": 100
+				},
+				"maximumAmount": {
+					"$ref": "#/definitions/amountWithCurrency"
+				},
+				"minusPercentage": {
+					"type": "number",
+					"minimum": 0,
+					"maximum": 100
+				},
+				"minimumAmount": {
+					"$ref": "#/definitions/amountWithCurrency"
+				}
+			},
+			"oneOf": [
+				{
+					"required": [
+						"plusPercentage",
+						"minusPercentage"
+					]
+				},
+				{
+					"required": [
+						"maximumAmount",
+						"minimumAmount"
+					]
+				}
+			]
+		},
+		"enclosedFile": {
+			"description": "Document(s) enclosed in the undertaking ",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"mediumType": {
+						"oneOf": [
+							{
+								"$ref": "#/definitions/mediumTypes"
+							},
+							{
+								"type": "array",
+								"minItems": 1,
+								"maxItems": 1,
+								"uniqueItems": true,
+								"items": {
+									"$ref": "#/definitions/mediumTypes"
+								}
+							}
+						]
+					},
+					"presentationChannel": {
+						"description": "Details of the presentation channel for the enclosed file",
+						"$ref": "#/definitions/deliveryChannel"
+					},
+					"identification": {
+						"description": "Name or other identification of the enclosed file",
+						"type": "string",
+						"minLength": 1
+					},
+					"formatType": {
+						"description": "enclosed file format",
+						"oneOf": [
+							{
+								"$ref": "#/definitions/formatTypes"
+							},
+							{
+								"type": "array",
+								"minItems": 1,
+								"maxItems": 1,
+								"uniqueItems": true,
+								"items": {
+									"$ref": "#/definitions/formatTypes"
+								}
+							}
+						]
+					},
+					"enclosure": {
+						"description": "actual enclosed file in various format. Possible to replace with binary attachment references, now a simple Base64 assumption",
+						"type": "string",
+						"contentEncoding": "base64"
+					}
+				},
+				"required": [
+					"mediumType",
+					"presentationChannel"
+				]
+			}
+		},
+		"dateChoice": {
+			"type": "object",
+			"properties": {
+				"date": {
+					"type": "string",
+					"format": "date"
+				},
+				"dateTime": {
+					"type": "string",
+					"format": "date-time"
+				}
+			},
+			"oneOf": [
+				{
+					"required": [
+						"date"
+					]
+				},
+				{
+					"required": [
+						"dateTime"
+					]
+				}
+			]
+		},
+		"statusCodes": {
+			"type": "string",
+			"enum": [
+				"accepted",
+				"counter undertaking amount change",
+				"undertaking amount change",
+				"non-confirmation",
+				"rejected",
+				"withdrawn"
+			]
+		},
+		"amountCovered": {
+			"type": "object",
+			"properties": {
+				"amountType": {
+					"description": "documentary credit additional amount from ready-made enumeration list",
+					"oneOf": [
+						{
+							"$ref": "#/definitions/amountTypes"
+						},
+						{
+							"type": "array",
+							"minItems": 1,
+							"maxItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"$ref": "#/definitions/amountTypes"
+							}
+						}
+					]
+				},
+				"additionalAmount": {
+					"$ref": "#/definitions/amountWithCurrency"
+				}
+			},
+			"required": [
+				"amountType",
+				"additionalAmount"
+			],
+			"additionalProperties": false
+		},
+		"amountTypes": {
+			"type": "string",
+			"enum": [
+				"interest",
+				"freight",
+				"insurance",
+				"other"
+			]
+		},
+		"available": {
+			"type": "object",
+			"properties": {
+				"availableType": {
+					"description": "availability from ready-made enumeration list",
+					"oneOf": [
+						{
+							"$ref": "#/definitions/availabilityTypes"
+						},
+						{
+							"type": "array",
+							"minItems": 1,
+							"maxItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"$ref": "#/definitions/availabilityTypes"
+							}
+						}
+					]
+				},
+				"availableAt": {
+					"$ref": "#/definitions/party"
+				}
+			},
+			"required": [
+				"availableType",
+				"availableAt"
+			],
+			"additionalProperties": false
+		},
+		"availabilityTypes": {
+			"type": "string",
+			"enum": [
+				"acceptance",
+				"deferred payment",
+				"mixed payment",
+				"negotiation",
+				"payment",
+				"other"
+			]
+		},
+		"paymentDetail": {
+			"type": "object",
+			"properties": {
+				"paymentParty": {
+					"$ref": "#/definitions/party"
+				},
+				"amount": {
+					"description": "mixed payment amount with currency",
+					"$ref": "#/definitions/amountWithCurrency"
+				},
+				"date": {
+					"description": "payment date of a mixed payment instance",
+					"$ref": "#/definitions/dateChoice"
+				},
+				"additionalInformation": {
+					"description": "free text information, or use of URL for ready-made text reference",
+					"type": "object",
+					"$ref": "#/definitions/uriTextChoice"
+				}
+			},
+			"required": [
+				"paymentParty",
+				"amount",
+				"date"
+			],
+			"additionalProperties": false
+		},
+		"paymentDeferred": {
+			"type": "object",
+			"properties": {
+				"date": {
+					"description": "date of a negotiation or deferred payment",
+					"$ref": "#/definitions/dateChoice"
+				},
+				"additionalInformation": {
+					"description": "free text information, or use of URL for ready-made text reference",
+					"type": "object",
+					"$ref": "#/definitions/uriTextChoice"
+				}
+			},
+			"required": [
+				"date"
+			],
+			"additionalProperties": false
+		},
+		"milestone": {
+			"description": "Details for one documentary credit milestone",
+			"type": "object",
+			"properties": {
+				"sequenceNo": {
+					"description": "Unique milestone number within the Documentary Credit",
+					"type": "number",
+					"minimum": 1
+				},
+				"linkIndicator": {
+					"description": "Standalone or alternate",
+					"$ref": "#/definitions/linkCode"
+				},
+				"referencedSequence": {
+					"description": "Alternate milestone number reference",
+					"type": "number",
+					"minimum": 1
+				},
+				"amount": {
+					"description": "milestone amount with currency",
+					"$ref": "#/definitions/amountWithCurrency"
+				},
+				"mixedPaymentDetails": {
+					"description": "Details for the mixed payments of the milestone",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/paymentDetail"
+					}
+				},
+				"specialPaymentDetails": {
+					"description": "free text information for milestone instance of possible special payment terms",
+					"type": "object",
+					"$ref": "#/definitions/uriTextChoice"
+				},
+				"negotiationDeferredPaymentDetails": {
+					"description": "Details for the negotiation or deferred payments",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/paymentDeferred"
+					}
+				},
+				"confirmationDetails": {
+					"description": "confirmation details of a documentary credit wuith date and party, indicated on milestone level",
+					"type": "object",
+					"properties": {
+						"byParty": {
+							"description": "documentary credit party from ready-made enumeration list",
+							"oneOf": [
+								{
+									"$ref": "#/definitions/partyTypes"
+								},
+								{
+									"type": "array",
+									"minItems": 1,
+									"maxItems": 1,
+									"uniqueItems": true,
+									"items": {
+										"$ref": "#/definitions/partyTypes"
+									}
+								}
+							]
+						},
+						"code": {
+							"description": "confirmation code",
+							"oneOf": [
+								{
+									"$ref": "#/definitions/confirmationTypes"
+								},
+								{
+									"type": "array",
+									"minItems": 1,
+									"maxItems": 1,
+									"uniqueItems": true,
+									"items": {
+										"$ref": "#/definitions/confirmationTypes"
+									}
+								}
+							]
+						},
+						"date": {
+							"description": "date of confirmation",
+							"$ref": "#/definitions/dateChoice"
+						},
+						"additionalInformation": {
+							"description": "free text information, or use of URL for ready-made text reference",
+							"type": "object",
+							"$ref": "#/definitions/uriTextChoice"
+						}
+					},
+					"required": [
+						"byParty",
+						"code",
+						"date"
+					],
+					"additionalProperties": false
+				},
+				"instructions": {
+					"description": "instructions from one party to another for milestone instance",
+					"type": "object",
+					"$ref": "#/definitions/instruction"
+				},
+				"draftsAt": {
+					"description": "specify the tenor of drafts to be drawn under the documentary credit",
+					"type": "object",
+					"properties": {
+						"exists": {
+							"description": "Indicates whether multiple demands are permitted",
+							"type": "boolean"
+						},
+						"party": {
+							"description": "documentary credit party from ready-made enumeration list",
+							"oneOf": [
+								{
+									"$ref": "#/definitions/partyTypes"
+								},
+								{
+									"type": "array",
+									"minItems": 1,
+									"maxItems": 1,
+									"uniqueItems": true,
+									"items": {
+										"$ref": "#/definitions/partyTypes"
+									}
+								}
+							]
+						},
+						"place": {
+							"description": "Place of documentary credit issuance",
+							"type": "object",
+							"$ref": "#/definitions/location"
+						}
+					},
+					"required": [
+						"exists",
+						"party",
+						"place"
+					],
+					"additionalProperties": false
+				},
+				"partialShipment": {
+					"description": "are partial shipments allowed under the documentary credit",
+					"oneOf": [
+						{
+							"$ref": "#/definitions/exceptionTypes"
+						},
+						{
+							"type": "array",
+							"minItems": 1,
+							"maxItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"$ref": "#/definitions/exceptionTypes"
+							}
+						}
+					]
+				},
+				"transShipment": {
+					"description": "are transshipments allowed under the documentary credit",
+					"oneOf": [
+						{
+							"$ref": "#/definitions/exceptionTypes"
+						},
+						{
+							"type": "array",
+							"minItems": 1,
+							"maxItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"$ref": "#/definitions/exceptionTypes"
+							}
+						}
+					]
+				},
+				"placeTakingCharge": {
+					"description": "This field specifies the place of taking in charge, the place of receipt, the place of dispatch or the place of shipment to be indicated on the transport document.",
+					"$ref": "#/definitions/transportLocation"
+				},
+				"loadingLocation": {
+					"description": "specifies the port of loading or airport of departure to be indicated on the transport document.",
+					"$ref": "#/definitions/transportLocation"
+				},
+				"dischargeLocation": {
+					"description": "specifies the port of discharge or airport of destination to be indicated on the transport document",
+					"$ref": "#/definitions/transportLocation"
+				},
+				"destinationLocation": {
+					"description": "specifies the final destination or place of delivery to be indicated on the transport document",
+					"$ref": "#/definitions/transportLocation"
+				},
+				"latestShipmentDate": {
+					"description": "Date of latest shipment",
+					"$ref": "#/definitions/dateChoice"
+				},
+				"shipmentPeriod": {
+					"description": "shipment period with start end end date",
+					"type": "object",
+					"properties": {
+						"fromDate": {
+							"$ref": "#/definitions/dateChoice"
+						},
+						"toDate": {
+							"$ref": "#/definitions/dateChoice"
+						}
+					},
+					"required": [
+						"fromDate",
+						"toDate"
+					]
+				},
+				"presentationPeriod": {
+					"description": "document presentation period with start end end date",
+					"type": "object",
+					"properties": {
+						"fromDate": {
+							"$ref": "#/definitions/dateChoice"
+						},
+						"toDate": {
+							"$ref": "#/definitions/dateChoice"
+						}
+					},
+					"required": [
+						"fromDate",
+						"toDate"
+					]
+				},
+				"additionalInformation": {
+					"description": "free text information for milestone instance, or use of URL for ready-made text reference",
+					"type": "object",
+					"$ref": "#/definitions/uriTextChoice"
+				},
+				"goodsDescription": {
+					"description": "documentary credit goods description.  only one description needed in a simple DC case",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/goods"
+					}
+				}
+			},
+			"required": [
+				"sequenceNo",
+				"amount",
+				"confirmationDetails",
+				"draftsAt",
+				"goodsDescription"
+			],
+			"additionalProperties": false
+		},
+		"transportLocation": {
+			"description": "Generic location definition for shipments including port info",
+			"type": "object",
+			"properties": {
+				"code": {
+					"description": "transportation type",
+					"oneOf": [
+						{
+							"$ref": "#/definitions/transportationTypes"
+						},
+						{
+							"type": "array",
+							"minItems": 1,
+							"maxItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"$ref": "#/definitions/transportationTypes"
+							}
+						}
+					]
+				},
+				"codeValue": {
+					"type": "string"
+				},
+				"portName": {
+					"type": "string"
+				},
+				"place": {
+					"description": "location definition",
+					"type": "object",
+					"$ref": "#/definitions/location"
+				}
+			},
+			"required": [
+				"code",
+				"codeValue"
+			],
+			"additionalProperties": false
+		},
+		"goods": {
+			"description": "Goods description instance",
+			"type": "object",
+			"properties": {
+				"transactionType": {
+					"oneOf": [
+						{
+							"$ref": "#/definitions/transactionTypes"
+						},
+						{
+							"type": "array",
+							"minItems": 1,
+							"maxItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"$ref": "#/definitions/transactionTypes"
+							}
+						}
+					]
+				},
+				"identification": {
+					"description": "Identifier for the goods",
+					"type": "string"
+				},
+				"date": {
+					"description": "Date of underlying transaction",
+					"$ref": "#/definitions/dateChoice"
+				},
+				"details": {
+					"description": "Details of the deliverable: issuer given code, name and quantity",
+					"type": "object",
+					"properties": {
+						"code": {
+							"description": "Issuer given product / service code of the deliverable",
+							"type": "string"
+						},
+						"name": {
+							"description": "Issuer given product / service name of the deliverable",
+							"type": "string"
+						},
+						"quantity": {
+							"description": "Issuer given product / service quantity of the deliverable",
+							"type": "string"
+						},
+						"incoTerms": {
+							"type": "object",
+							"properties": {
+								"codeVersion": {
+									"description": "INCO terms list version name",
+									"type": "string"
+								},
+								"code": {
+									"oneOf": [
+										{
+											"$ref": "#/definitions/incoTerm"
+										},
+										{
+											"type": "array",
+											"minItems": 1,
+											"maxItems": 1,
+											"uniqueItems": true,
+											"items": {
+												"$ref": "#/definitions/incoTerm"
+											}
+										}
+									]
+								}
+							},
+							"required": [
+								"codeVersion",
+								"code"
+							]
+						}
+					}
+				},
+				"additionalInformation": {
+					"description": "free text information, or use of URL for ready-made text reference",
+					"type": "object",
+					"$ref": "#/definitions/uriTextChoice"
+				},
+				"requiredDocuments": {
+					"description": "Details of the presentations related to the Documentary Credit",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/requiredDocument"
+					}
+				}
+			},
+			"required": [
+				"transactionType",
+				"identification",
+				"date",
+				"details",
+				"requiredDocuments"
+			]
+		},
+		"requiredDocument": {
+			"description": "Single instance of details of the required document and its presentation",
+			"type": "object",
+			"properties": {
+				"documentType": {
+					"oneOf": [
+						{
+							"$ref": "#/definitions/documentTypes"
+						},
+						{
+							"type": "array",
+							"minItems": 1,
+							"maxItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"$ref": "#/definitions/documentTypes"
+							}
+						}
+					]
+				},
+				"date": {
+					"description": "Date of document",
+					"$ref": "#/definitions/dateChoice"
+				},
+				"settings": {
+					"description": "presentation document basic settings",
+					"type": "array",
+					"items": {
+						"$ref": "#/definitions/settingsDocument"
+					}
+				},
+				"amountOriginals": {
+					"description": "Indicates the amount of Orginals",
+					"type": "number",
+					"minimum": 0,
+					"maximum": 100
+				},
+				"amountCopies": {
+					"description": "Indicates the amount of Copies",
+					"type": "number",
+					"minimum": 0,
+					"maximum": 100
+				},
+				"enclosedFiles": {
+					"description": "Document(s) enclosed in the undertaking directly related to the undertaking",
+					"$ref": "#/definitions/enclosedFile"
+				},
+				"additionalInformation": {
+					"description": "free text information, or use of URL for ready-made text reference",
+					"type": "object",
+					"$ref": "#/definitions/uriTextChoice"
+				}
+			},
+			"required": [
+				"type",
+				"date",
+				"amountOriginals",
+				"amountCopies"
+			]
+		},
+		"confirmationTypes": {
+			"type": "string",
+			"enum": [
+				"confirm",
+				"may add",
+				"without"
+			]
+		},
+		"exceptionTypes": {
+			"type": "string",
+			"enum": [
+				"allowed",
+				"not allowed",
+				"conditional"
+			]
+		},
+		"transportationTypes": {
+			"type": "string",
+			"enum": [
+				"air",
+				"seas",
+				"road",
+				"rail"
+			]
+		},
+		"incoTerm": {
+			"type": "string",
+			"enum": [
+				"EXW - Ex Works",
+				"FCA - Free Carrier",
+				"CPT - Carriage Paid To",
+				"CIP - Carriage and Insurance Paid to",
+				"DAP - Delivered At Place",
+				"DPU - Delivered at Place Unloaded",
+				"DDP - Delivered Duty Paid",
+				"FAS - Free Alongside Ship",
+				"FOB - Free On Board",
+				"CFR - Cost and Freight",
+				"CIF - Cost, Insurance and Freight"
+			]
+		},
+		"linkCode": {
+			"type": "string",
+			"enum": [
+				"standalone",
+				"alternate"
+			]
+		},
+		"instruction": {
+			"description": "instructions by any documentary credit party to another documentary credit party, with possibly many instances",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"from": {
+						"description": "documentary credit party from ready-made enumeration list",
+						"oneOf": [
+							{
+								"$ref": "#/definitions/partyTypes"
+							},
+							{
+								"type": "array",
+								"minItems": 1,
+								"maxItems": 1,
+								"uniqueItems": true,
+								"items": {
+									"$ref": "#/definitions/partyTypes"
+								}
+							}
+						]
+					},
+					"to": {
+						"description": "documentary credit party from ready-made enumeration list",
+						"oneOf": [
+							{
+								"$ref": "#/definitions/partyTypes"
+							},
+							{
+								"type": "array",
+								"minItems": 1,
+								"maxItems": 1,
+								"uniqueItems": true,
+								"items": {
+									"$ref": "#/definitions/partyTypes"
+								}
+							}
+						]
+					},
+					"date": {
+						"description": "Date of documentary credit instruction",
+						"$ref": "#/definitions/dateChoice"
+					},
+					"message": {
+						"description": "free text information, or use of URL for ready-made text reference",
+						"type": "object",
+						"$ref": "#/definitions/uriTextChoice"
+					}
+				},
+				"required": [
+					"from",
+					"to",
+					"date",
+					"message"
+				],
+				"additionalProperties": false
+			}
+		},
+		"settingsDC": {
+			"type": "object",
+			"properties": {
+				"documentLanguage": {
+					"description": "language of the documents in ISO 639-1 codes",
+					"type": "string",
+					"pattern": "^[a-zA-Z]{2}$"
+				},
+				"sanctionsIndicator": {
+					"description": "true = Sanctions clauses included, false = no sanctions clauses",
+					"type": "boolean"
+				}
+			},
+			"required": [
+				"documentLanguage"
+			],
+			"additionalProperties": false
+		},
+		"settingsDocument": {
+			"type": "object",
+			"properties": {
+				"DCnumberIndicator": {
+					"description": "true = DC number required within the document, false = no DC number required",
+					"type": "boolean"
+				},
+				"documentDateIssuanceRelation": {
+					"description": "Defining the document date relation to documentary credit issuance date",
+					"oneOf": [
+						{
+							"$ref": "#/definitions/dateCodes"
+						},
+						{
+							"type": "array",
+							"minItems": 1,
+							"maxItems": 1,
+							"uniqueItems": true,
+							"items": {
+								"$ref": "#/definitions/dateCodes"
+							}
+						}
+					]
+				}
+			},
+			"additionalProperties": false
+		},
+		"dateCodes": {
+			"type": "string",
+			"enum": [
+				"before issuance date",
+				"after issuance date",
+				"not before issuance date"
+			]
+		}
+	}
+}
